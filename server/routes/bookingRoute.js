@@ -1,9 +1,9 @@
-import express from "express";
-import { createBooking, getBookings } from "../controllers/bookingController.js";
+import express from "express"
+import { createBooking,getBooking } from "../controllers/bookingController.js";
 
 const router = express.Router();
 
-router.post("/book", createBooking);
-router.get("/all", getBookings);
+router.post("/create",createBooking);
+router.get("/all",getBooking);
 
-export default router;
+export default router ;
