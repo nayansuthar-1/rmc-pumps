@@ -1,7 +1,7 @@
 import { Menu } from 'lucide-react'
 import React from 'react'
 
-function Navbar(toggleSidebar){
+function Navbar({toggleSidebar}){
   return (
     <div className='h-16 bg-white border-b flex items-center justify-between px-4 md:px-6'>
       
