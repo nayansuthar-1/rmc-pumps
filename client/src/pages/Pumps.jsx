@@ -33,6 +33,10 @@ function Pumps() {
 
   //..........delete pump.................
   const handleDelete = async (id) => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this item?",
+    );
+    if (!confirmDelete) return;
     await deletePump(id);
     await loadPumps();
     await console.log("pump deleted : ", id);
@@ -66,22 +70,43 @@ function Pumps() {
   useEffect(() => {
     loadPumps();
   }, []);
+
+  //...........filter /search pumps..........//
+  const [search, setSearch] = useState("");
+
+  const filteredPumps = pumps.filter((pump) =>
+    pump.name.toLowerCase().includes(search.toLowerCase()),
+  );
+
+  
+
   return (
     <div>
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-4">
         <h2 className="text-2xl font-bold">Pumps</h2>
 
+        <input
+          type="text"
+          placeholder="Search pumps..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="border px-3 py-2 rounded-xl w-100"
+        />
+
         <button
           onClick={() => setIsOpen(true)}
-          className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+          className="flex w-30 items-center justify-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
         >
-          <Plus size={18} />
           Add Pump
         </button>
       </div>
 
-      <PumpsTable pumps={pumps} onDelete={handleDelete} onEdit={handleEdit} />
+      <PumpsTable
+        pumps={filteredPumps}
+        onDelete={handleDelete}
+        onEdit={handleEdit}
+      />
 
       <Modal
         isOpen={isOpen}
