@@ -11,5 +11,10 @@ router.get("/", getPumps);
 router.get("/:id", getPumpById);
 router.put("/:id", protect, adminMiddleware, upload.single("image"), updatePump);
 router.delete("/:id", protect, adminMiddleware, deletePump);
+router.post("/",createPump);
+router.get("/",getPumps);
+router.put("/:id",updatePump);
+router.delete("/:id",deletePump);
 
 export default router;
+export default router ;
