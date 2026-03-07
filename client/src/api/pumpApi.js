@@ -1,21 +1,15 @@
-import axios from "axios";
+import api from "./axios";
 
-const API = "http://localhost:5000/api/pumps";
-
-export const getPumps = () => axios.get(API);
+export const getPumps = () => api.get("/pumps");
 
 export const createPump = (data) =>
-    axios.post(API, data, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
+  api.post("/pumps", data, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
 
-    export const updatePump = (id, data) =>
-        axios.put(`${API}/${id}`, data, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        });
+export const deletePump = (id) => api.delete(`/pumps/${id}`);
 
-export const deletePump = (id) => axios.delete(`${API}/${id}`);
+export const updatePump = (id, data) =>
+  api.put(`/pumps/${id}`, data);

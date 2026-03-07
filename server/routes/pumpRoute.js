@@ -17,4 +17,3 @@ router.put("/:id",updatePump);
 router.delete("/:id",deletePump);
 
 export default router;
-export default router ;
