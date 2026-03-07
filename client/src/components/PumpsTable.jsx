@@ -1,62 +1,70 @@
 import React from "react";
 
-import { Pencil, Trash } from "lucide-react";
-
-function PumpsTable() {
-
-  const pumps = [
-    { id: 1, name: "Pump A", location: "Delhi", status: "Active" },
-    { id: 2, name: "Pump B", location: "Jaipur", status: "Idle" },
-    { id: 3, name: "Pump C", location: "Mumbai", status: "Active" },
-  ];
-
+function PumpsTable({ pumps, onDelete, onEdit }) {
   return (
-    <div className="bg-white rounded-xl shadow-sm overflow-hidden">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {pumps.map((pump) => (
+        <div
+          key={pump._id}
+          className="bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-md transition"
+        >
+          {/* Pump Image */}
+          <div className="h-48 w-full overflow-hidden group">
+            <img
+              src={
+                pump.image
+                  ? `http://localhost:5000/uploads/${pump.image}`
+                  : "https://via.placeholder.com/400x300?text=Pump"
+              }
+              alt={pump.name}
+              className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
+            />
+          </div>
 
-      <table className="w-full text-left">
+          {/* Pump Details */}
+          <div className="p-5 space-y-3">
+            <h3 className="text-lg font-semibold text-gray-800">{pump.name}</h3>
 
-        <thead className="bg-gray-50 border-b">
-          <tr>
-            <th className="p-4 text-sm font-semibold text-gray-600">Pump</th>
-            <th className="p-4 text-sm font-semibold text-gray-600">Location</th>
-            <th className="p-4 text-sm font-semibold text-gray-600">Status</th>
-            <th className="p-4 text-sm font-semibold text-gray-600">Actions</th>
-          </tr>
-        </thead>
+            <p className="text-sm text-gray-500">
+              {pump.type} • {pump.capacity}
+            </p>
 
-        <tbody>
+            <p className="text-sm text-gray-600">Location: {pump.location}</p>
 
-          {pumps.map((pump) => (
-            <tr key={pump.id} className="border-b hover:bg-gray-50">
+            <p className="text-xl font-bold text-blue-600">
+              ₹{pump.pricePerDay} / day
+            </p>
 
-              <td className="p-4">{pump.name}</td>
-              <td className="p-4">{pump.location}</td>
+            {/* Status */}
+            <span
+              className={`inline-block px-3 py-1 text-xs font-medium rounded-full ${
+                pump.status === "active"
+                  ? "bg-green-100 text-green-700"
+                  : "bg-red-100 text-red-700"
+              }`}
+            >
+              {pump.status}
+            </span>
 
-              <td className="p-4">
-                <span className="px-2 py-1 text-xs rounded bg-green-100 text-green-700">
-                  {pump.status}
-                </span>
-              </td>
+            {/* Actions */}
+            <div className="flex gap-3 pt-3">
+              <button
+                className="flex-1 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700"
+                onClick={() => onEdit(pump)}
+              >
+                Edit
+              </button>
 
-              <td className="p-4 flex gap-3">
-
-                <button className="text-blue-600 hover:text-blue-800">
-                  <Pencil size={18} />
-                </button>
-
-                <button className="text-red-600 hover:text-red-800">
-                  <Trash size={18} />
-                </button>
-
-              </td>
-
-            </tr>
-          ))}
-
-        </tbody>
-
-      </table>
-
+              <button
+                className="flex-1 bg-red-600 text-white py-2 rounded-lg hover:bg-red-700"
+                onClick={() => onDelete(pump._id)}
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      ))}
     </div>
   );
 }
