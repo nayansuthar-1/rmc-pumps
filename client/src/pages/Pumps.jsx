@@ -5,7 +5,6 @@ import { Plus } from "lucide-react";
 import PumpForm from "../components/PumpForm";
 import { createPump, deletePump } from "../api/pumpApi";
 import { getPumps } from "../api/pumpApi";
-import { data } from "react-router-dom";
 import { updatePump } from "../api/pumpApi";
 
 function Pumps() {
@@ -78,7 +77,6 @@ function Pumps() {
     pump.name.toLowerCase().includes(search.toLowerCase()),
   );
 
-  
 
   return (
     <div>
