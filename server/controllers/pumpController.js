@@ -1,9 +1,9 @@
 import Pump from "../models/pumpModel.js";
-export const createPump = async(req,res)=>{
+export const createPump = async (req,res)=>{
 try{
     const pump = new Pump(req.body);
     const  savedPump = await pump.save();
-    res.status(201).json({message:savedPump});
+    res.json(savedPump);
 }
 catch(err){
     res.status(500).json({
