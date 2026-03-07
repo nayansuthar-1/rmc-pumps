@@ -33,19 +33,20 @@ function Pumps() {
   }, []);
 
   // add pump
-  const handleAddPump = async (newPump) => {
-    setLoading(true);
+  const handleAddPump = async (formData) => {
+    try {
+      setLoading(true);
 
-    const formattedPump = {
-      ...newPump,
-      pricePerDay: Number(newPump.pricePerDay),
-    };
+      await createPump(formData); // send FormData directly
 
-    await createPump(formattedPump);
-    await loadPumps();
+      await loadPumps();
 
-    setLoading(false);
-    setIsOpen(false);
+      setIsOpen(false);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   // delete pump

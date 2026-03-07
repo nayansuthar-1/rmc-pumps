@@ -7,6 +7,7 @@ import bookingRoute from './routes/bookingRoute.js';
 import pumpRoute from './routes/pumpRoute.js';
 import userRoute from './routes/userRoute.js'
 import adminRoute from './routes/adminRoute.js'
+import path from "path";
 
 dotenv.config();
 connectDB();
@@ -19,7 +20,7 @@ app.use(express.json());
 app.use("/api/bookings",bookingRoute);
 app.use("/api/pumps",pumpRoute);
 app.use("/api/user",userRoute);
-app.use("/api/admin",adminRoute);
+app.use("/api/auth",adminRoute);
 app.use("/uploads", express.static("uploads"));
 const PORT = process.env.PORT;
 

@@ -37,16 +37,18 @@ function PumpForm({ onSubmit, pump, loading }) {
       formData.append("image", image);
     }
 
-    console.log("sending pump : ", formData);
+    for (let pair of formData.entries()) {
+      console.log(pair[0], pair[1]);
+    }
 
     onSubmit(formData);
 
-    setName("");
-    setType("");
-    setCapacity("");
-    setPricePerDay("");
-    setLocation("");
-    setStatus("");
+    // setName("");
+    // setType("");
+    // setCapacity("");
+    // setPricePerDay("");
+    // setLocation("");
+    // setStatus("");
   };
 
   return (

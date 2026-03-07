@@ -6,14 +6,14 @@ import { adminMiddleware } from "../middleware/adminMiddleware.js";
 
 const router = express.Router();
 
-router.post("/", protect, adminMiddleware, upload.single("image"), createPump);
+router.post("/",protect, adminMiddleware, upload.single("image"), createPump);
 router.get("/", getPumps);
 router.get("/:id", getPumpById);
 router.put("/:id", protect, adminMiddleware, upload.single("image"), updatePump);
 router.delete("/:id", protect, adminMiddleware, deletePump);
-router.post("/",createPump);
-router.get("/",getPumps);
-router.put("/:id",updatePump);
-router.delete("/:id",deletePump);
+// router.post("/",createPump);
+// router.get("/",getPumps);
+// router.put("/:id",updatePump);
+// router.delete("/:id",deletePump);
 
 export default router;

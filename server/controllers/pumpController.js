@@ -3,16 +3,21 @@ import Pump from "../models/pumpModel.js";
 export const createPump = async (req, res) => {
   try {
 
-    const image = req.file ? req.file.path : null;
+    const image = req.file ? req.file.filename : null;
 
-    const pump = new Pump({
-      ...req.body,
+    const { name, type, capacity, pricePerDay, location, status } = req.body;
+
+    const pump = await Pump.create({
+      name,
+      type,
+      capacity,
+      pricePerDay,
+      location,
+      status,
       image
     });
 
-    const savedPump = await pump.save();
-
-    res.status(201).json(savedPump);
+    res.status(201).json(pump);
 
   } catch (err) {
     res.status(500).json({ message: err.message });

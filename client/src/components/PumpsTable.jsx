@@ -14,10 +14,10 @@ function PumpsTable({ pumps, onDelete, onEdit }) {
               src={
                 pump.image
                   ? `http://localhost:5000/uploads/${pump.image}`
-                  : "https://via.placeholder.com/400x300?text=Pump"
+                  : "/pump-placeholder.png"
               }
               alt={pump.name}
-              className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
+              className="w-full h-full object-cover"
             />
           </div>
 
