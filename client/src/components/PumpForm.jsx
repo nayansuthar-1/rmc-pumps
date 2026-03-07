@@ -7,6 +7,7 @@ function PumpForm({ onSubmit, pump, loading }) {
   const [pricePerDay, setPricePerDay] = useState(pump?.pricePerDay || "");
   const [location, setLocation] = useState(pump?.location || "");
   const [status, setStatus] = useState("active");
+  const [image, setImage] = useState(null);
 
   useEffect(() => {
     if (pump) {
@@ -21,19 +22,24 @@ function PumpForm({ onSubmit, pump, loading }) {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const newPump = {
-      _id: pump?._id,
-      name,
-      type,
-      capacity,
-      pricePerDay,
-      location,
-      status,
-    };
+    const formData = new FormData();
 
-    console.log("sending pump : ", newPump);
+    if (pump?._id) formData.append("_id", pump._id);
 
-    onSubmit(newPump);
+    formData.append("name", name);
+    formData.append("type", type);
+    formData.append("capacity", capacity);
+    formData.append("pricePerDay", pricePerDay);
+    formData.append("location", location);
+    formData.append("status", status);
+
+    if (image) {
+      formData.append("image", image);
+    }
+
+    console.log("sending pump : ", formData);
+
+    onSubmit(formData);
 
     setName("");
     setType("");
@@ -107,6 +113,15 @@ function PumpForm({ onSubmit, pump, loading }) {
         onChange={(e) => setStatus(e.target.value)}
         className="border rounded-lg px-3 py-2"
         required
+      />
+
+      {/* ........pump image ..................... */}
+      {/* Pump Image */}
+      <input
+        type="file"
+        accept="image/*"
+        onChange={(e) => setImage(e.target.files[0])}
+        className="border rounded-lg px-3 py-2"
       />
 
       <button
