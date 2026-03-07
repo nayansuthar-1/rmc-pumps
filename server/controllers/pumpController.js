@@ -12,7 +12,7 @@ catch(err){
 };
 }
 
-export  const getPump = async (req,res)=>{
+export  const getPumps = async (req,res)=>{
     try{
         const pumps = await Pump.find();
         res.json(pumps);
