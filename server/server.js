@@ -20,6 +20,7 @@ app.use("/api/bookings",bookingRoute);
 app.use("/api/pumps",pumpRoute);
 app.use("/api/user",userRoute);
 app.use("/api/admin",adminRoute);
+app.use("/uploads", express.static("uploads"));
 const PORT = process.env.PORT;
 
 app.listen(PORT,()=>{
