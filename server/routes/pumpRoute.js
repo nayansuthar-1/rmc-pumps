@@ -1,13 +1,15 @@
 import express from "express";
-import { createPump,getPumps,updatePump,deletePump} from "../controllers/pumpController.js";
+import { createPump, getPumps, updatePump, deletePump, getPumpById } from "../controllers/pumpController.js";
+import upload from "../middleware/uploadMiddleware.js";
+import { protect } from "../middleware/authMiddleware.js";
+import { adminMiddleware } from "../middleware/adminMiddleware.js";
 
+const router = express.Router();
 
-const router= express.Router();
+router.post("/", protect, adminMiddleware, upload.single("image"), createPump);
+router.get("/", getPumps);
+router.get("/:id", getPumpById);
+router.put("/:id", protect, adminMiddleware, upload.single("image"), updatePump);
+router.delete("/:id", protect, adminMiddleware, deletePump);
 
-router.post("/create",createPump);
-router.get("/get",getPumps);
-router.put("/update/:id",updatePump);
-router.delete("/delete/:id",deletePump);
-
-export default router ;
-
+export default router;

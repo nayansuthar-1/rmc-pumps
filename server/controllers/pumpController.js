@@ -1,57 +1,96 @@
 import Pump from "../models/pumpModel.js";
-export const createPump = async(req,res)=>{
-try{
-    const pump = new Pump(req.body);
-    const  savedPump = await pump.save();
-    res.status(201).json({message:savedPump});
-}
-catch(err){
-    res.status(500).json({
-        message: err.message
+
+export const createPump = async (req, res) => {
+  try {
+
+    const image = req.file ? req.file.path : null;
+
+    const pump = new Pump({
+      ...req.body,
+      image
     });
-};
-}
 
-export  const getPumps = async (req,res)=>{
-    try{
-        const pumps = await Pump.find();
-        res.json(pumps);
-    }catch(err){
-       res.status(500).json({message:err.message});
-    }
+    const savedPump = await pump.save();
 
+    res.status(201).json(savedPump);
+
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 };
 
 
-export const updatePump = async (req,res)=>{
-    try{
-        const pump = await Pump.findByIdAndUpdate(
-            req.params.id,
-            req.body,
-            {new :true}
-        );
+export const getPumps = async (req, res) => {
+  try {
 
-        if(!pump){
-            res.status(500).json({message:"pump not found"});
-        };
-        res.json(pump);
+    const pumps = await Pump.find();
 
-    }catch(err){
-        res.status(500).json({message:err.message});
-    }
+    res.json(pumps);
+
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 };
 
-export const deletePump = async(req,res)=>{
-try{
-        const pump = await Pump.findByIdAndDelete(req.params.id );
 
-    if(!pump){
-        return res.status.json({message:"pump is not found"})
+export const getPumpById = async (req, res) => {
+  try {
+
+    const pump = await Pump.findById(req.params.id);
+
+    if (!pump) {
+      return res.status(404).json({ message: "Pump not found" });
     }
-    res.json({message:"Pump deleted Successfully"})
-    
-}catch(err){
-    res.status(500).json({message:err.message});
-}
 
+    res.json(pump);
+
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+
+
+export const updatePump = async (req, res) => {
+  try {
+
+    const data = { ...req.body };
+
+    if (req.file) {
+      data.image = req.file.path;
+    }
+
+    const pump = await Pump.findByIdAndUpdate(
+      req.params.id,
+      data,
+      { new: true }
+    );
+
+    if (!pump) {
+      return res.status(404).json({ message: "Pump not found" });
+    }
+
+    res.json(pump);
+
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+
+
+export const deletePump = async (req, res) => {
+  try {
+
+    const pump = await Pump.findByIdAndDelete(req.params.id);
+
+    if (!pump) {
+      return res.status(404).json({ message: "Pump not found" });
+    }
+
+    res.json({ message: "Pump deleted successfully" });
+
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 };
