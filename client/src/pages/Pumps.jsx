@@ -6,12 +6,17 @@ import PumpForm from "../components/PumpForm";
 import { createPump, deletePump } from "../api/pumpApi";
 import { getPumps } from "../api/pumpApi";
 import { data } from "react-router-dom";
+import { updatePump } from "../api/pumpApi";
 
 function Pumps() {
+  // ..............loading state.................
+  const [loading, setLoading] = useState(false);
+
+  //  ..........add pump modal..............
   const [isOpen, setIsOpen] = useState(false);
 
   const handleAddPump = async (newPump) => {
-    setIsOpen(false);
+    setLoading(true);
     const formattedPump = {
       ...newPump,
       pricePerDay: Number(newPump.pricePerDay),
@@ -19,16 +24,21 @@ function Pumps() {
     console.log("New Pump : ", formattedPump);
     await createPump(formattedPump);
     await loadPumps();
+
+    setLoading(false);
+    setIsOpen(false);
   };
 
   const [pumps, setPumps] = useState([]);
 
+  //..........delete pump.................
   const handleDelete = async (id) => {
     await deletePump(id);
     await loadPumps();
     await console.log("pump deleted : ", id);
   };
 
+  // ..............load pump...............
   const loadPumps = async () => {
     try {
       const res = await getPumps();
@@ -36,6 +46,21 @@ function Pumps() {
     } catch (err) {
       console.log("error : ", err);
     }
+  };
+
+  //.............edit pump..................
+  const [editingPump, setEditingPump] = useState(null);
+  const handleEdit = (pump) => {
+    setIsOpen(true);
+    console.log("Editing pump:", pump);
+    setEditingPump(pump);
+  };
+
+  const handleUpdatePump = async (pump) => {
+    await updatePump(pump._id, pump);
+    setEditingPump(null);
+    setIsOpen(false);
+    loadPumps();
   };
 
   useEffect(() => {
@@ -56,10 +81,20 @@ function Pumps() {
         </button>
       </div>
 
-      <PumpsTable pumps={pumps} onDelete={handleDelete} />
+      <PumpsTable pumps={pumps} onDelete={handleDelete} onEdit={handleEdit} />
 
-      <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
-        <PumpForm onSubmit={handleAddPump} />
+      <Modal
+        isOpen={isOpen}
+        onClose={() => {
+          setIsOpen(false);
+          setEditingPump(null);
+        }}
+      >
+        <PumpForm
+          pump={editingPump}
+          loading={loading}
+          onSubmit={editingPump ? handleUpdatePump : handleAddPump}
+        />
       </Modal>
     </div>
   );

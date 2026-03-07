@@ -43,7 +43,7 @@ export const updatePump = async (req,res)=>{
 
 export const deletePump = async(req,res)=>{
 try{
-        const pump = await Pump.findByIdAndDelete(req.params.id );
+        const pump = await Pump.findByIdAndDelete(req.params.id);
 
     if(!pump){
         return res.status.json({message:"pump is not found"})

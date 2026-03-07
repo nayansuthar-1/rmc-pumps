@@ -4,9 +4,9 @@ import { createPump,getPumps,updatePump,deletePump} from "../controllers/pumpCon
 
 const router= express.Router();
 
-router.post("/create",createPump);
-router.get("/get",getPumps);
-router.put("/update/:id",updatePump);
-router.delete("/delete/:id",deletePump);
+router.post("/",createPump);
+router.get("/",getPumps);
+router.put("/:id",updatePump);
+router.delete("/:id",deletePump);
 
 export default router ;

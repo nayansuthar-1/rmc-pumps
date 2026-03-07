@@ -1,17 +1,28 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
-function PumpForm({ onSubmit }) {
-  const [name, setName] = useState("");
-  const [type, setType] = useState("");
-  const [capacity, setCapacity] = useState("");
-  const [pricePerDay, setPricePerDay] = useState("");
-  const [location, setLocation] = useState("");
+function PumpForm({ onSubmit, pump, loading }) {
+  const [name, setName] = useState(pump?.name || "");
+  const [type, setType] = useState(pump?.type || "");
+  const [capacity, setCapacity] = useState(pump?.capacity || "");
+  const [pricePerDay, setPricePerDay] = useState(pump?.pricePerDay || "");
+  const [location, setLocation] = useState(pump?.location || "");
   const [status, setStatus] = useState("active");
+
+  useEffect(() => {
+    if (pump) {
+      setName(pump.name);
+      setType(pump.type);
+      setCapacity(pump.capacity);
+      setPricePerDay(pump.pricePerDay);
+      setLocation(pump.location);
+    }
+  }, [pump]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     const newPump = {
+      _id: pump?._id,
       name,
       type,
       capacity,
@@ -20,8 +31,7 @@ function PumpForm({ onSubmit }) {
       status,
     };
 
-    console.log('sending pump : ', newPump);
-    
+    console.log("sending pump : ", newPump);
 
     onSubmit(newPump);
 
@@ -35,7 +45,9 @@ function PumpForm({ onSubmit }) {
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-      <h2 className="text-xl font-semibold">Add Pump</h2>
+      <h2 className="text-xl font-semibold">
+        {pump ? "Edit Pump" : "Add Pump"}
+      </h2>
 
       {/* ............pump name............. */}
       <input
@@ -77,7 +89,6 @@ function PumpForm({ onSubmit }) {
         required
       />
 
-
       {/* .............pump location ........... */}
       <input
         type="text"
@@ -100,9 +111,10 @@ function PumpForm({ onSubmit }) {
 
       <button
         type="submit"
-        className="bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700"
+        disabled={loading}
+        className="bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50"
       >
-        Save Pump
+        {loading ? "Saving..." : "Save Pump"}
       </button>
     </form>
   );
