@@ -1,6 +1,7 @@
 import React from "react";
+import { getPumpById } from "../api/pumpApi";
 
-function PumpsTable({ pumps, onDelete, onEdit }) {
+function PumpsTable({ pumps, onDelete, onEdit, onView }) {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
       {pumps.map((pump) => (
@@ -9,7 +10,12 @@ function PumpsTable({ pumps, onDelete, onEdit }) {
           className="bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-md transition"
         >
           {/* Pump Image */}
-          <div className="h-48 w-full overflow-hidden group">
+          <div
+            className="h-48 w-full overflow-hidden group"
+            onClick={() => {
+              onView(pump);
+            }}
+          >
             <img
               src={
                 pump.image
@@ -50,14 +56,20 @@ function PumpsTable({ pumps, onDelete, onEdit }) {
             <div className="flex gap-3 pt-3">
               <button
                 className="flex-1 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700"
-                onClick={() => onEdit(pump)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onEdit(pump);
+                }}
               >
                 Edit
               </button>
 
               <button
                 className="flex-1 bg-red-600 text-white py-2 rounded-lg hover:bg-red-700"
-                onClick={() => onDelete(pump._id)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onDelete(pump._id);
+                }}
               >
                 Delete
               </button>

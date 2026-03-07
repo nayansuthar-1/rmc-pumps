@@ -2,13 +2,31 @@ import React, { useState, useEffect } from "react";
 import Modal from "../components/Modal";
 import PumpsTable from "../components/PumpsTable";
 import PumpForm from "../components/PumpForm";
-import { createPump, deletePump, getPumps, updatePump } from "../api/pumpApi";
+import {
+  createPump,
+  deletePump,
+  getPumpById,
+  getPumps,
+  updatePump,
+} from "../api/pumpApi";
+import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 function Pumps() {
+  const location = useLocation();
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [pumps, setPumps] = useState([]);
   const [editingPump, setEditingPump] = useState(null);
+  const [selectedPump, setSelectedPump] = useState(null);
+
+  useEffect(() => {
+    if (location.state?.editPump) {
+      setEditingPump(location.state.editPump);
+      setIsOpen(true);
+    }
+  }, [location.state]);
 
   // mobile filter panel
   const [isFilterOpen, setIsFilterOpen] = useState(false);
@@ -66,11 +84,20 @@ function Pumps() {
     setIsOpen(true);
   };
 
-  const handleUpdatePump = async (pump) => {
-    await updatePump(pump._id, pump);
+  const handleUpdatePump = async (formData) => {
+    const id = formData.get("_id");
+
+    await updatePump(id, formData);
+
     setEditingPump(null);
     setIsOpen(false);
     loadPumps();
+    alert("Pump updated successfully");
+  };
+
+  // ..........view pump............//
+  const handleViewPump = (pump) => {
+    setSelectedPump(pump);
   };
 
   // pump types (dynamic)
@@ -154,12 +181,13 @@ function Pumps() {
 
       {/* Pumps Grid */}
       <PumpsTable
+        onView={handleViewPump}
         pumps={filteredPumps}
         onDelete={handleDelete}
         onEdit={handleEdit}
       />
 
-      {/* Pump Modal */}
+      {/*Add Pump Modal */}
       <Modal
         isOpen={isOpen}
         onClose={() => {
@@ -172,6 +200,40 @@ function Pumps() {
           loading={loading}
           onSubmit={editingPump ? handleUpdatePump : handleAddPump}
         />
+      </Modal>
+
+      <Modal isOpen={!!selectedPump} onClose={() => setSelectedPump(null)}>
+        {selectedPump && (
+          <div className="space-y-4">
+            <img
+              src={`http://localhost:5000/uploads/${selectedPump.image}`}
+              alt={selectedPump.name}
+              className="w-full h-64 object-cover rounded-lg"
+            />
+
+            <h2 className="text-xl font-semibold">{selectedPump.name}</h2>
+
+            <p>
+              <b>Type:</b> {selectedPump.type}
+            </p>
+            <p>
+              <b>Capacity:</b> {selectedPump.capacity}
+            </p>
+            <p>
+              <b>Location:</b> {selectedPump.location}
+            </p>
+            <p>
+              <b>Price/Day:</b> ₹{selectedPump.pricePerDay}
+            </p>
+
+            <button
+              onClick={() => navigate(`/pumps/${selectedPump._id}`)}
+              className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700"
+            >
+              Full Details
+            </button>
+          </div>
+        )}
       </Modal>
 
       {/* Mobile Filter Bottom Sheet */}

@@ -29,7 +29,7 @@ function Sidebar({ isOpen, closeSidebar }) {
       <nav className="flex flex-col gap-2">
 
         <NavLink
-          to="/"
+          to="/dashboard"
           onClick={closeSidebar}
           className={({ isActive }) =>
             `${linkStyle} ${isActive ? activeStyle : inactiveStyle}`

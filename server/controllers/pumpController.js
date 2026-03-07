@@ -18,6 +18,8 @@ export const createPump = async (req, res) => {
     });
 
     res.status(201).json(pump);
+    console.log(req.params._id);
+    
 
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -62,7 +64,7 @@ export const updatePump = async (req, res) => {
     const data = { ...req.body };
 
     if (req.file) {
-      data.image = req.file.path;
+      data.image = req.file.filename;
     }
 
     const pump = await Pump.findByIdAndUpdate(
