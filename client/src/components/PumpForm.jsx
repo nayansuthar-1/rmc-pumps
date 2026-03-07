@@ -2,27 +2,42 @@ import React, { useState } from "react";
 
 function PumpForm({ onSubmit }) {
   const [name, setName] = useState("");
+  const [type, setType] = useState("");
+  const [capacity, setCapacity] = useState("");
+  const [pricePerDay, setPricePerDay] = useState("");
   const [location, setLocation] = useState("");
+  const [status, setStatus] = useState("active");
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const pump = {
+    const newPump = {
       name,
+      type,
+      capacity,
+      pricePerDay,
       location,
-      status: "Active",
+      status,
     };
 
-    onSubmit(pump);
+    console.log('sending pump : ', newPump);
+    
+
+    onSubmit(newPump);
 
     setName("");
+    setType("");
+    setCapacity("");
+    setPricePerDay("");
     setLocation("");
+    setStatus("");
   };
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4">
       <h2 className="text-xl font-semibold">Add Pump</h2>
 
+      {/* ............pump name............. */}
       <input
         type="text"
         placeholder="Pump Name"
@@ -32,11 +47,53 @@ function PumpForm({ onSubmit }) {
         required
       />
 
+      {/* ...............pump type............... */}
+      <input
+        type="text"
+        placeholder="Pump Type"
+        value={type}
+        onChange={(e) => setType(e.target.value)}
+        className="border rounded-lg px-3 py-2"
+        required
+      />
+
+      {/* ............pump capacity.................. */}
+      <input
+        type="text"
+        placeholder="Pump Capacity"
+        value={capacity}
+        onChange={(e) => setCapacity(e.target.value)}
+        className="border rounded-lg px-3 py-2"
+        required
+      />
+
+      {/* ...............pump price per day .............. */}
+      <input
+        type="number"
+        placeholder="Price Per Day"
+        value={Number(pricePerDay)}
+        onChange={(e) => setPricePerDay(e.target.value)}
+        className="border rounded-lg px-3 py-2"
+        required
+      />
+
+
+      {/* .............pump location ........... */}
       <input
         type="text"
         placeholder="Location"
         value={location}
         onChange={(e) => setLocation(e.target.value)}
+        className="border rounded-lg px-3 py-2"
+        required
+      />
+
+      {/* .........pump status................... */}
+      <input
+        type="text"
+        placeholder="Status"
+        value={status}
+        onChange={(e) => setStatus(e.target.value)}
         className="border rounded-lg px-3 py-2"
         required
       />

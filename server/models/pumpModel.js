@@ -22,6 +22,10 @@ const pumpSchema = new mongoose.Schema({
 
   location: {
     type: String
+  },
+
+  status: {
+    type: String,
   }
 
 }, { timestamps: true });

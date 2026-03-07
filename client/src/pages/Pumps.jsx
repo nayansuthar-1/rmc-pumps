@@ -1,15 +1,46 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Modal from "../components/Modal";
 import PumpsTable from "../components/PumpsTable";
 import { Plus } from "lucide-react";
 import PumpForm from "../components/PumpForm";
+import { createPump, deletePump } from "../api/pumpApi";
+import { getPumps } from "../api/pumpApi";
+import { data } from "react-router-dom";
 
 function Pumps() {
   const [isOpen, setIsOpen] = useState(false);
-  const handleAddPump = (pump) => {
-    console.log("New Pump : ", pump);
+
+  const handleAddPump = async (newPump) => {
     setIsOpen(false);
+    const formattedPump = {
+      ...newPump,
+      pricePerDay: Number(newPump.pricePerDay),
+    };
+    console.log("New Pump : ", formattedPump);
+    await createPump(formattedPump);
+    await loadPumps();
   };
+
+  const [pumps, setPumps] = useState([]);
+
+  const handleDelete = async (id) => {
+    await deletePump(id);
+    await loadPumps();
+    await console.log("pump deleted : ", id);
+  };
+
+  const loadPumps = async () => {
+    try {
+      const res = await getPumps();
+      setPumps(res.data);
+    } catch (err) {
+      console.log("error : ", err);
+    }
+  };
+
+  useEffect(() => {
+    loadPumps();
+  }, []);
   return (
     <div>
       {/* Header */}
@@ -25,7 +56,7 @@ function Pumps() {
         </button>
       </div>
 
-      <PumpsTable />
+      <PumpsTable pumps={pumps} onDelete={handleDelete} />
 
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
         <PumpForm onSubmit={handleAddPump} />
