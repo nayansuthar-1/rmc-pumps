@@ -1,3 +1,3 @@
-# RMC Pumps Rental Website
+# RMC Pumps Rental 
 
-MERN stack project for pump rental system..
+SCRAPPED 
